@@ -4,10 +4,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 
 import java.util.Date;
@@ -52,7 +54,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 10)) // 4 hrs token
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -78,4 +80,14 @@ public class JwtService {
 
         return extractClaim(token, Claims::getExpiration);
     }
+/*
+    //==============
+    public void getSecretKey() {
+        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        String secretString = Encoders.BASE64.encode(key.getEncoded());
+        System.out.println("Secret key: " + secretString);
+    }
+
+ */
+
 }

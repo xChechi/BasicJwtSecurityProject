@@ -1,5 +1,6 @@
 package chechi.homework.jwtsecurity.config;
 
+import chechi.homework.jwtsecurity.entity.Role;
 import chechi.homework.jwtsecurity.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
         http
-            .csrf(AbstractHttpConfigurer::disable) // (csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable()) // (csrf -> csrf.disable())
             .authorizeHttpRequests(auth ->auth
                  .requestMatchers("/api/v1/auth/**").permitAll()
-                    .requestMatchers("/api/v1/demo").authenticated()
                  .anyRequest().authenticated())
             .sessionManagement(sessionManagementConfig -> sessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
